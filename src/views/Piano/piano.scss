@@ -1,0 +1,13 @@
+.piano-page {
+  height: 100vh;
+  position: relative;
+  .note-bar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    touch-action: none;
+    cursor: default;
+    user-select: none;
+    pointer-events: none;
+  }
+}

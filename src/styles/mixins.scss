@@ -1,0 +1,7 @@
+@mixin link-colors {
+  color: #000000;
+  text-decoration: none;
+  &:hover {
+    color: red;
+  }
+}
