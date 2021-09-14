@@ -1,13 +1,15 @@
 <template>
   <div class="piano-page" id="piano">
     <!-- 菜单层 -->
-    <div></div>
+    <div class="menu-body"></div>
     <!-- canvas层 -->
     <div class="note-bar">
-      <canvas width="100%" height="100%"></canvas>
+      <canvas></canvas>
     </div>
     <!-- 键盘层 -->
-    <div></div>
+    <div class="keybord-body">
+      <WhiteKey />
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,12 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {}
+  },
+  components: {
+    WhiteKey: () =>
+      import(
+        /* webpackChunkName: "WhiteKey" */ 'components/Piano/Keys/WhiteKey.vue'
+      )
   },
   computed: {
     ...mapState({
@@ -30,8 +38,8 @@ export default {
     notes.forEach(item => {
       els[`${item}`] = {
         element: new Audio(this.acoustic_grand_piano[item]),
-        isPlay: false,
-        isPressed: false
+        isPlay: false, // 当前是否正在播放
+        isPressed: false // 当前是否是按压状态
       }
     })
     this.$store.commit('Piano/setPhonOgram', els)
@@ -41,11 +49,14 @@ export default {
   methods: {
     keyDowns(e) {
       console.log(e)
+    },
+    menuClick() {
+      alert(111)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import url(./piano.scss);
+@import './piano.scss';
 </style>

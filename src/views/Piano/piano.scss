@@ -1,13 +1,32 @@
 .piano-page {
   height: 100vh;
   position: relative;
+  .menu-body {
+    width: 100%;
+    height: 80%;
+    overflow-y: scroll;
+    overflow: auto;
+  }
   .note-bar {
     position: absolute;
     top: 0;
     width: 100%;
-    touch-action: none;
+    height: 80%;
+    touch-action: none; // 不让该元素进行任何操作
     cursor: default;
     user-select: none;
     pointer-events: none;
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .keybord-body {
+    background-color: #cc1;
+    width: 100%;
+    height: 20%;
+    position: absolute;
+    top: 80%;
+    left: 0;
   }
 }
