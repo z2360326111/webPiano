@@ -5,9 +5,13 @@
 <script>
 export default {
   props: {
-    keyInfo: Object,
-    default: {
-      name: 'B0'
+    keyInfo: {
+      type: Object,
+      default: function() {
+        return {
+          name: 'B0'
+        }
+      }
     }
   }
 }

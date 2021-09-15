@@ -115,7 +115,7 @@ module.exports = {
     },
     proxy: {
       '/test': {
-        target: 'http://mdata-api.idealead-test.cluster.gdinsight.com',
+        target: 'http://localhost:3000',
         secure: false,
         changeOrigin: true,
         pathRewrite: { '^/test': '' } // 重写路径，使 /test 不被传递
