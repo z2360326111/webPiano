@@ -1,8 +1,9 @@
 // 主要做键盘监听事件
 // 键盘的弹奏
 import store from 'store'
+import './canvasMode.js'
 const { Piano } = store.state
-import { codeToAudioConfig1 } from './keyCodeMap'
+import { codeToAudioConfig1 } from '../piano/keyCodeMap'
 const down = e => {
   // console.log('按下')
   if (!codeToAudioConfig1[e.keyCode]) return

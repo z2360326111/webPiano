@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>martech-web</h1>
-    <div class="scroll-contaiin">
+    <div>
       <RollNum />
     </div>
   </div>

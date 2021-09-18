@@ -1,5 +1,5 @@
 .piano-page {
-  height: 100vh;
+  height: calc(100vh - 20px);
   position: relative;
   .menu-body {
     width: 100%;
@@ -24,35 +24,95 @@
   .keybord-body {
     background-color: #cc1;
     width: 100%;
-    height: 20%;
+    height: 200px;
     position: absolute;
-    top: 80%;
+    bottom: 0;
     left: 0;
     display: flex;
-    .white-key {
-      position: relative;
-      height: 100%;
-      background-color: #fff;
-      border: 1px solid rgba(0, 0, 0, 0.267);
-      margin: 0 0 0 -1px;
-      border-radius: 4px;
-      text-align: center;
-      color: #000;
-      width: 40px;
-      overflow: hidden;
+    transform-origin: 0 100%;
+    transition: all 0.1s ease;
+    .white {
+      height: 200px;
+      white-space: nowrap;
+      bottom: 0;
+      margin: 0 0 0 1px;
+      z-index: 2;
+      // pointer-events: none;
+      .white-key {
+        position: relative;
+        display: inline-block;
+        width: 41px;
+        height: 100%;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.267);
+        margin: 0 0 0 -1px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        text-align: center;
+        color: #000;
+        .voice-name {
+          position: absolute;
+          width: 100%;
+          bottom: 10px;
+        }
+        .key-bg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .black {
+      position: absolute;
+      margin: 0 0 0 26px;
+      // pointer-events: none;
+      width: 0;
+      height: 125px;
+      z-index: 4;
+      .black-key {
+        position: absolute;
+        // left: 0;
+        top: 0;
+        width: 27px;
+        height: 100%;
+        background-color: #444;
+        border: 1px solid rgba(0, 0, 0, 0.533);
+        border-radius: 3px;
+        color: #fff;
+        text-align: center;
+      }
+      .pressAct {
+        
+        height: 100%;
+        width: 100%;
+        background: #FD6E36;
+      }
       .voice-name {
         position: absolute;
-        width: 100%;
-        bottom: 10px;
+        top: 0;
+        left: 0;
       }
-      .key-bg {
+    }
+  }
+  #result {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    .pay-logo {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      .img {
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
     }
   }
 }
 
 .pressAct {
-  background: #ccc;
+  background: rgba(#2DB22D, 0.6);
 }

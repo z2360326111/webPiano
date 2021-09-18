@@ -1,32 +1,25 @@
 <template>
   <div>
-    <audio :src="voice" id="real-audio"></audio>
-    <input type="text" v-model="note" />
-    <button @click="change">切换</button>
-    <button @click="stop">暂停</button>
-    <ul class="roll-box" :style="{ height: '21px' }">
-      <li v-for="item in rollItem" :key="item">{{ item }}</li>
-      <li id="roll-li">0</li>
-    </ul>
-    <div>{{ `1line 1 2333` }}</div>
-    <svg>
-      <filter id="blur">
-        <feGaussianBlur
-          in="SoruceGraphic"
-          :stdDeviation="`0 ${blur}`"
-        ></feGaussianBlur>
-      </filter>
-    </svg>
+    <input type="text" v-model="orderId" />
+    <div class="btns-contain">
+      <button @click="wxCreate">微信-生成订单</button>
+      <button @click="wxClose">微信-关闭交易</button>
+      <button @click="wxCancel">微信-交易撤销</button>
+      <button @click="wxQuery">微信-交易查询</button>
+    </div>
+    <div id="result"></div>
   </div>
 </template>
 
 <script>
+import QRCode from 'qrcodejs2'
 export default {
   data() {
     return {
       blur: 2,
       note: '',
-      voice: ''
+      voice: '',
+      orderId: null // 订单id
     }
   },
   props: {
@@ -53,6 +46,29 @@ export default {
     stop() {
       const el = document.getElementById('real-audio')
       el.play()
+    },
+    // 微信-生成订单
+    wxCreate() {},
+    // 微信-关闭交易
+    wxClose() {},
+    // 微信-交易撤销
+    wxCancel() {},
+    // 微信-交易查询
+    wxQuery() {},
+    // 生成二维码
+    createQrcode(url) {
+      const el = document.getElementById('result')
+      const qrcode = new QRCode(el, {
+        text: '微信支付',
+        width: 150,
+        height: 150,
+        colorDark: '#000',
+        colorLight: '#fff',
+        correctLevel: QRCode.CorrectLevel.L
+      })
+      // console.log(qrcode)
+      qrcode.clear()
+      qrcode.makeCode(url)
     }
   },
   computed: {}
@@ -60,59 +76,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.roll-box {
-  border: 1px solid #ccc;
-  border-radius: 2px;
+.btns-contain {
+  margin-top: 20px;
+  display: flex;
   width: 100%;
-  // height: 20px;
-  overflow: hidden;
-}
-@keyframes move {
-  from {
-    transform: translateY(-90%);
-    filter: url(#blur);
-  }
-  to {
-    transform: translateY(1%);
-    filter: url(#blur);
-  }
-}
-@keyframes bounce-in-down {
-  from {
-    transform: translateY(calc(var(--i) * -9.09% - 7%));
-    filter: none;
-  }
-  25% {
-    transform: translateY(calc(var(--i) * -9.09% + 3%));
-  }
-  50% {
-    transform: translateY(calc(var(--i) * -9.09% - 1%));
-  }
-  70% {
-    transform: translateY(calc(var(--i) * -9.09% + 0.6%));
-  }
-  85% {
-    transform: translateY(calc(var(--i) * -9.09% - 0.3%));
-  }
-  to {
-    transform: translateY(calc(var(--i) * -9.09%));
-  }
-}
-@keyframes enhance-bounce-in-down {
-  25% {
-    transform: translateY(8%);
-  }
-  50% {
-    transform: translateY(-4%);
-  }
-  70% {
-    transform: translateY(2%);
-  }
-  85% {
-    transform: translateY(-1%);
-  }
-  to {
-    transform: translateY(0);
-  }
+  justify-content: space-around;
 }
 </style>
