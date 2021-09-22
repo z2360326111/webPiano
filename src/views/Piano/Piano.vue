@@ -1,7 +1,9 @@
 <template>
   <div class="piano-page" id="piano">
     <!-- 菜单层 -->
-    <div class="menu-body"></div>
+    <div class="menu-body">
+      <button @click="h5Api">开始播放</button>
+    </div>
     <!-- canvas层 -->
     <div
       class="note-bar"

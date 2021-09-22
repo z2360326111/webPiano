@@ -1,3 +1,4 @@
+import { voiceToFrency, music } from 'utils/piano/voice.js'
 export const canvasMixin = {
   data() {
     return {
@@ -44,16 +45,24 @@ export const canvasMixin = {
       // 音量控制
       const gainNode = ctx.createGain()
       // 音色
-      const osT = ctx.createOscillator()
-      osT.connect(gainNode)
-      osT.type = 'sin'
-      osT.frequency.value = 150.0
+      // const osT = ctx.createOscillator()
+      // osT.connect(gainNode)
+      // osT.type = 'sin'
+      // osT.frequency.value = 150.0
       gainNode.connect(ctx.destination)
       gainNode.gain.setValueAtTime(0, ctx.currentTime + 0.01)
       gainNode.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.01)
-
-      osT.start(ctx.currentTime)
-      osT.stop(ctx.currentTime + 1)
+      music.forEach(item => {
+        const osT = ctx.createOscillator()
+        osT.connect(gainNode)
+        osT.type = 'sin'
+        osT.frequency.value = voiceToFrency[item.name]
+        const SE = this.computTime(item.brief, item.anyRhy, item.th)
+        osT.start(ctx.currentTime + SE.start)
+        osT.stop(ctx.currentTime + SE.end)
+      })
+      // osT.start(ctx.currentTime)
+      // osT.stop(ctx.currentTime + 1)
     },
     /**
      *
@@ -65,7 +74,7 @@ export const canvasMixin = {
       // 由于这个curentime是一个固定值，所以每一个的时值，都是往后累加
       let start
       let end
-      const theTHTime = this.rhythmTime / 60 // 每一个小节多少秒
+      const theTHTime = (this.rhythm[1] * 60) / this.rhythmTime // 每一个小节多少秒
       const theRhtTime = theTHTime / this.rhythm[1] // 每一拍的时值
       start = (brief - 1) * theTHTime + (anyRhy - 1) * theRhtTime
       end = start + (this.rhythm[0] / th) * theRhtTime

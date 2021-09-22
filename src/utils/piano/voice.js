@@ -86,9 +86,64 @@ const voiceToFrency = {
 }
 const music = [
   {
-    name: '',
+    name: 'C3',
     brief: 1,
     anyRhy: 1,
+    th: 8
+  },
+  {
+    name: 'E3',
+    brief: 1,
+    anyRhy: 1.5,
+    th: 8
+  },
+  {
+    name: 'G3',
+    brief: 1,
+    anyRhy: 2,
+    th: 8
+  },
+  {
+    name: 'C4',
+    brief: 1,
+    anyRhy: 2.5,
+    th: 8 / 3
+  },
+  {
+    name: 'E4',
+    brief: 1,
+    anyRhy: 3.5,
+    th: 8
+  },
+  // Am
+  {
+    name: 'A2',
+    brief: 2,
+    anyRhy: 1,
+    th: 8
+  },
+  {
+    name: 'E3',
+    brief: 2,
+    anyRhy: 1.5,
+    th: 8
+  },
+  {
+    name: 'A3',
+    brief: 2,
+    anyRhy: 2,
+    th: 8
+  },
+  {
+    name: 'C4',
+    brief: 2,
+    anyRhy: 2.5,
+    th: 8 / 3
+  },
+  {
+    name: 'E4',
+    brief: 2,
+    anyRhy: 3.5,
     th: 8
   }
 ]
