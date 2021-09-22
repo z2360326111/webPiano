@@ -24,6 +24,14 @@
     htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
     <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
     <% } %>
-    <script src="https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@gh-pages/MusyngKite/acoustic_grand_piano-ogg.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@gh-pages/MusyngKite/acoustic_grand_piano-ogg.js">
+    'https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@gh-pages/MusyngKite/acoustic_grand_piano-ogg.js'
+    'https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@gh-pages/MusyngKite/acoustic_grand_piano-ogg.js'
+    </script>
+    <!-- 用于注入一些必要插件和适配浏览器 -->
+    <script>
+      // h5的音频API
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    </script>
   </body>
 </html>

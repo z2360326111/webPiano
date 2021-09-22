@@ -1,17 +1,7 @@
 <template>
   <div class="piano-page" id="piano">
     <!-- 菜单层 -->
-    <div class="menu-body">
-      <button @click="aliPay">支付20</button>
-      <button @click="getCurBody">关闭当前订单</button>
-      <input type="text" v-model="orderId" />
-      <button @click="nonePiano">搜索</button>
-      <div id="result">
-        <div class="pay-logo">
-          <img :src="payLogo" alt="" />
-        </div>
-      </div>
-    </div>
+    <div class="menu-body"></div>
     <!-- canvas层 -->
     <div
       class="note-bar"
@@ -66,13 +56,11 @@
 
 <script>
 import 'utils/piano/keybord.js'
-import QRCode from 'qrcodejs2'
 import { mapState } from 'vuex'
 
 import { canvasMixin } from './canvasMixin.js'
 import { drawRect } from 'utils/piano/canvasMode.js'
 import { keysOrder, blackKeys } from 'utils/piano/keyCodeMap'
-import { goPay, closePay } from 'api/pay.js'
 export default {
   mixins: [canvasMixin],
   data() {
@@ -128,47 +116,6 @@ export default {
   methods: {
     nonePiano() {
       this.showPiano = !this.showPiano
-    },
-    // 生成订单
-    aliPay() {
-      const data = {
-        outTradeNo: this.orderId
-      }
-      goPay(data).then(res => {
-        const el = document.getElementById('result')
-        // const aEl = document.createElement('a')
-        // aEl.href = res.result
-        // aEl.innerHTML = '去支付'
-        // // el.innerHTML = aEl
-        // el.appendChild(aEl)
-        console.log(res.result)
-        // window.open(res.result, '_blank', 'top=200')
-        if (res.code === 200) {
-          this.payDress = res.result
-          // eslint-disable-next-line no-undef
-          // new QRCode(el, res.result.qrCode)
-          const qrcode = new QRCode(el, {
-            text: res.result.qrCode,
-            width: 150,
-            height: 150,
-            colorDark: '#000',
-            colorLight: '#fff',
-            correctLevel: QRCode.CorrectLevel.L
-          })
-          console.log(qrcode)
-          qrcode.clear()
-          qrcode.makeCode(res.result.qrCode)
-        }
-      })
-    },
-    // 关闭当前订单
-    aliPayClose() {
-      const data = {
-        tradeNo: this.orderId
-      }
-      closePay(data).then(res => {
-        console.log('关闭订单结果', res)
-      })
     },
     // 鼠标按下按键
     hitKey(curKey) {

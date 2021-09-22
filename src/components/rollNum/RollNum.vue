@@ -7,20 +7,32 @@
       <button @click="wxCancel">微信-交易撤销</button>
       <button @click="wxQuery">微信-交易查询</button>
     </div>
-    <div id="result"></div>
+    <div class="btns-contain">
+      <button @click="aliCreate">支付宝-生成订单</button>
+      <button @click="aliPayClose">支付宝-关闭交易</button>
+    </div>
+    <div v-if="resultUrl" class="qr-box">
+      <AliQRcode :url="resultUrl" />
+    </div>
   </div>
 </template>
 
 <script>
 import QRCode from 'qrcodejs2'
+import { goPay, closePay } from 'api/pay.js'
 export default {
   data() {
     return {
       blur: 2,
       note: '',
       voice: '',
-      orderId: null // 订单id
+      orderId: null, // 订单id
+      resultUrl: null
     }
+  },
+  components: {
+    AliQRcode: () =>
+      import(/* webpackChunkName: "AliQRcode" */ 'components/Pay/AliQRcode.vue')
   },
   props: {
     rollItem: {
@@ -69,6 +81,27 @@ export default {
       // console.log(qrcode)
       qrcode.clear()
       qrcode.makeCode(url)
+    },
+    // 支付宝-生成订单
+    aliCreate() {
+      const data = {
+        outTradeNo: this.orderId
+      }
+      goPay(data).then(res => {
+        if (res.code === 200) {
+          this.resultUrl = res.result.qrCode
+        }
+      })
+    },
+    // 支付宝-关闭订单
+    aliPayClose() {
+      const data = {
+        tradeNo: this.orderId
+      }
+      this.resultUrl = null
+      closePay(data).then(res => {
+        console.log('关闭订单结果', res)
+      })
     }
   },
   computed: {}
@@ -81,5 +114,9 @@ export default {
   display: flex;
   width: 100%;
   justify-content: space-around;
+}
+.qr-box {
+  width: 150px;
+  height: 150px;
 }
 </style>
