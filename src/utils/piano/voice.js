@@ -147,4 +147,8 @@ const music = [
     th: 8
   }
 ]
-export { voiceToFrency, music }
+const a = {
+  AccessKeyID: 'LTAI5tAZkbVRyWEmXMrEZf1p',
+  AccessKeySecret: 'DGK0Efgn9wGi54aTABBtv3JiXkW2zX'
+}
+export { voiceToFrency, music, a }

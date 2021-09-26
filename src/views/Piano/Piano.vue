@@ -63,6 +63,7 @@ import { mapState } from 'vuex'
 import { canvasMixin } from './canvasMixin.js'
 import { drawRect } from 'utils/piano/canvasMode.js'
 import { keysOrder, blackKeys } from 'utils/piano/keyCodeMap'
+import { voiceToFrency } from 'utils/piano/voice'
 export default {
   mixins: [canvasMixin],
   data() {
@@ -79,7 +80,8 @@ export default {
         height: 0
       },
       canvas: null,
-      ctx: null // canvas上下文
+      ctx: null, // canvas上下文
+      osTPress: {}
     }
   },
   components: {
@@ -113,6 +115,7 @@ export default {
     })
     this.$store.commit('Piano/setPhonOgram', els)
     this.AudioElements = els
+    this.initAdCtx()
     // console.log(els)
   },
   methods: {
@@ -121,23 +124,40 @@ export default {
     },
     // 鼠标按下按键
     hitKey(curKey) {
-      const el = this.phonogram[curKey]
+      // const el = this.phonogram[curKey]
+      console.log(curKey)
       // this.canvas.width = 600
-      console.log(this.canvas.width, this.canvas.height)
+      // console.log(this.canvas.width, this.canvas.height)
       drawRect(this.ctx, { x: 10, y: 10, w: 10, h: 30 })
-      if (!el.isPressed) {
-        el.element.playbackRate = 1 // 播放速度
-        el.element.currentTime = 0
-        el.element.play()
-        this.$store.commit('Piano/setPress', {
-          key: curKey,
-          value: true
-        })
-      }
+      // if (!el.isPressed) {
+      //   el.element.playbackRate = 1 // 播放速度
+      //   el.element.currentTime = 0
+      //   el.element.play()
+      //   this.$store.commit('Piano/setPress', {
+      //     key: curKey,
+      //     value: true
+      //   })
+      // }
       // el.isPressed = true
+      // 如果已经存在了，则先停止，再新建一个音色
+      this.osTPress[curKey].isPressed = true
+      if (this[curKey]) {
+        this[curKey].stop(0.01)
+      }
+      const osT = this.createGain(curKey)
+      this[curKey] = osT
+      osT.start(0.1)
     },
     // 鼠标抬起
     cacelKey(curKey) {
+      console.log('抬起', this.osT)
+      this[curKey].stop(0.01)
+      this.osTPress[curKey].isPressed = false
+      setTimeout(() => {
+        this[curKey] = null
+      }, 0.01)
+      // eslint-disable-next-line no-constant-condition
+      if (1 == '1' || 2 == true) return
       const el = this.phonogram[curKey]
       const { playbackRate, currentTime } = el.element
       this.$store.commit('Piano/setPress', {
@@ -151,7 +171,8 @@ export default {
     },
     // 获取每一个按键是否是被按压的状态
     getIsPress(curKey) {
-      let res = this.phonogram[curKey].isPressed || false
+      // let res = this.phonogram[curKey].isPressed || false
+      const res = this.osTPress[curKey].isPressed || false
       return res
     },
     // 获取当前窗口
@@ -185,6 +206,35 @@ export default {
         this.canvas.height = el[0].clientHeight
         this.canvas.width = el[0].clientWidth
       }
+    },
+    // 初始化音频控制器上下文
+    initAdCtx() {
+      // 控制器
+      const AudioContext = window.AudioContext || window.webkitAudioContext
+      const ctx = new AudioContext()
+      this.Actx = ctx
+      // 音量控制
+      const gainNode = ctx.createGain()
+      this.gainNode = gainNode
+      // 初始化按键状态
+      const osTs = {}
+      Object.keys(voiceToFrency).forEach(key => {
+        osTs[key] = {
+          isPressed: false
+        }
+      })
+      this.$set(this, 'osTPress', osTs)
+    },
+    // 创建音色
+    createGain(curKey, type) {
+      const osT = this.Actx.createOscillator()
+      osT.connect(this.gainNode)
+      osT.type = type || 'sin'
+      osT.frequency.value = voiceToFrency[curKey] || 0
+      this.gainNode.connect(this.Actx.destination)
+      this.gainNode.gain.setValueAtTime(0, 0.01)
+      this.gainNode.gain.linearRampToValueAtTime(0.2, 0.1)
+      return osT
     }
   }
 }

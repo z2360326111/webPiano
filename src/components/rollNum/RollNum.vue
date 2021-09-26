@@ -11,6 +11,18 @@
       <button @click="aliCreate">支付宝-生成订单</button>
       <button @click="aliPayClose">支付宝-关闭交易</button>
     </div>
+    <a-upload
+      name="avatar"
+      class="avatar-uploader"
+      :show-upload-list="false"
+      :multiple="true"
+      action="/"
+      :before-upload="beforeUpload"
+      :disabled="loading"
+    >
+      <p>上传图片</p>
+      <a-spin size="small" v-if="loading" class="loading" />
+    </a-upload>
     <div v-if="resultUrl" class="qr-box">
       <AliQRcode :url="resultUrl" />
     </div>
@@ -18,6 +30,7 @@
 </template>
 
 <script>
+import UploadFile from 'utils/uploadImg/upload-to-oss.js'
 import QRCode from 'qrcodejs2'
 import { goPay, closePay } from 'api/pay.js'
 export default {
@@ -27,7 +40,8 @@ export default {
       note: '',
       voice: '',
       orderId: null, // 订单id
-      resultUrl: null
+      resultUrl: null,
+      loading: false
     }
   },
   components: {
@@ -84,6 +98,7 @@ export default {
     },
     // 支付宝-生成订单
     aliCreate() {
+      this.resultUrl = null
       const data = {
         outTradeNo: this.orderId
       }
@@ -102,6 +117,27 @@ export default {
       closePay(data).then(res => {
         console.log('关闭订单结果', res)
       })
+    },
+    async beforeUpload(file) {
+      // console.log(file, fileList)
+      // const a = 1
+      // if (a) {
+      //   return
+      // }
+      const img = await new UploadFile({
+        file
+      })
+      img
+        .upload_png_image()
+        .then(res => {
+          // this.$emit('upSuccess', res)
+          console.log('上传图片结果', res)
+          this.loading = false
+        })
+        .catch(() => {
+          this.$message.warning('上传出错了~~')
+          this.loading = false
+        })
     }
   },
   computed: {}

@@ -8,10 +8,12 @@ window.MIDI
   : ''
 // import Antd from 'ant-design-vue'
 // import 'ant-design-vue/dist/antd.css'
-import { Button, Icon, message } from 'ant-design-vue'
+import { Button, Icon, message, Upload } from 'ant-design-vue'
 import './mock'
 
-Vue.use(Button).use(Icon)
+Vue.use(Button)
+  .use(Icon)
+  .use(Upload)
 
 Vue.prototype.$message = message
 
